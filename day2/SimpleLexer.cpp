@@ -69,16 +69,17 @@ ASTNode* SimpleLexer::additive(TokenReader& reader)
     //什么情况会直接return child1? 
     while(true){ //通过循环替代右递归
         Token token = reader.peek(); // 预读
-        if(token.type == "Plus"){// 读出加号
+        if(token.type == "Plus" || token.type == "Minus"){// 读出加减号
             token = reader.read(); 
             ASTNode* child2 = multiplicative(reader);
             if(child2 != NULL){ 
-                node = new ASTNode("+", ASTNodeType::Additive);
+                node = new ASTNode(token.type, ASTNodeType::Additive);
                 node->addChild(child1);
                 node->addChild(child2);
                 child1 = node; 
             }
-        }else{
+        }
+        else{
             break;
         }
     }
@@ -99,18 +100,18 @@ ASTNode* SimpleLexer::multiplicative(TokenReader& reader)
         while(true)
         {
             Token token = reader.peek(); //预读
-            if(token.type == "Star") //读出乘号
+            if(token.type == "Star" || token.type == "Slash") //读出乘除号
             {
                 Token token = reader.read();//消耗乘号
                 ASTNode *child2 = NULL;
                 if(reader.peek().type =="Digit") //读出数字
                 {
-                    token = reader.read(); //消耗
-                    child2 = new ASTNode(token.text, ASTNodeType::IntLiteral);
+                    Token newToken = reader.read(); //消耗
+                    child2 = new ASTNode(newToken.text, ASTNodeType::IntLiteral);
                 } 
                 if(child2 != NULL) //如果成功读出右侧乘法因子
                 {
-                    node = new ASTNode("*", ASTNodeType::Multiplicative);
+                    node = new ASTNode(token.type, ASTNodeType::Multiplicative);
                     node->addChild(child1);
                     node->addChild(child2);
                     child1 = node;
