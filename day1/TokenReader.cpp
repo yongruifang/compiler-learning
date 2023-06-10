@@ -3,7 +3,21 @@
 TokenReader::TokenReader(string str_)
 {
     str = str_;
+    initMap();
     parse();
+}
+void TokenReader::initMap()
+{
+    tokenTypeMap[ID] = "ID";
+    tokenTypeMap[ID_int] = "int";
+    tokenTypeMap[GT] = "GT";
+    tokenTypeMap[GE] = "GE";
+    tokenTypeMap[EQ] = "EQ";
+    tokenTypeMap[IntLiteral] = "IntLiteral";
+    tokenTypeMap[Plus] = "Plus";
+    tokenTypeMap[Minus] = "Minus";
+    tokenTypeMap[Star] = "Star";
+    tokenTypeMap[Slash] = "Slash";
 }
 //============编写状态迁移的逻辑========================
 void TokenReader::parse()
@@ -91,6 +105,7 @@ void TokenReader::parse()
 STATE TokenReader::initToken(char ch)
 {
     if(token.text.length()>0){ 
+        token.type = tokenTypeMap[token.state];
         tokens.push_back(token);
         token = Token();
     }
@@ -132,7 +147,7 @@ STATE TokenReader::initToken(char ch)
 //==========状态迁移的逻辑完成=======================
 void TokenReader::dump(){
     for (auto token: tokens){
-        cout << "\"" << token.text << "\" ";
+        cout << token.type << ": " << token.text <<  endl;
     }
     cout << endl;
 }

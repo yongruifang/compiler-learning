@@ -6,9 +6,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include "ctype.h"
 using namespace std;
-// 通过枚举量 定义 状态
+// 通过枚举量 定义 自动机状态
 enum STATE
 {
 	INIT = 0, // 初始状态
@@ -22,15 +23,19 @@ enum STATE
 // 
 typedef struct {
     string text =  "";
-    STATE state = INIT;
+    STATE state = INIT; 
+    string type = "";
 }Token;
 class TokenReader{
 private:
     string str;
     Token token;
     vector<Token> tokens;
+    map<STATE, string> tokenTypeMap;
+    void initMap();
     STATE initToken(char ch);// 开始解析的时候，进入初始状态；某个Token解析完毕，也进入初始状态
     void parse();  //状态转移的逻辑函数
+    
 public:
     TokenReader(string str_);//初始化
     ~TokenReader(){}
