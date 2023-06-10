@@ -5,6 +5,8 @@
 class SimpleLexer
 {
 public:
+	// 统一入口
+	ASTNode* program(TokenReader &reader);
 	ASTNode* multiplicative(TokenReader &reader);
 	ASTNode* additive(TokenReader& reader);
 	ASTNode* multiplyDeclaration(TokenReader& reader);

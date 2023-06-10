@@ -1,5 +1,24 @@
 #include "SimpleLexer.h"
 /**
+ * 统一入口
+*/
+ASTNode* SimpleLexer::program(TokenReader &reader)
+{
+    ASTNode* node = new ASTNode("root", ASTNodeType::Program);
+    while(reader.peek().type != ""){
+        ASTNode* child = intDeclaration(reader);
+        if(child == NULL){
+            child = additive(reader);
+        }
+        if(child == NULL){
+            throw "unknown statement";
+        }else{
+            node->addChild(child);
+        }
+    }
+    return node;
+}
+/**
  * 解析加法表达式
  * additive -> multiplicative | multiplicative + additive
 */

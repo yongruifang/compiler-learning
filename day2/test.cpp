@@ -10,7 +10,7 @@ int main()
     TokenReader reader(str[2]);
     //reader.dump();
     SimpleLexer lexer;
-    ASTNode *root = lexer.intDeclaration(reader);
+    ASTNode *root = lexer.program(reader);
     root->dump(root,"");
     return 0;
 }
