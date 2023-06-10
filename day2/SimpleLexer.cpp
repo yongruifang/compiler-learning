@@ -46,17 +46,16 @@ ASTNode* SimpleLexer::multiplicative(TokenReader& reader)
             Token token = reader.peek(); //预读
             if(token.type == "Star") //读出乘号
             {
-                Token tmpToken = reader.read();//消耗乘号
+                Token token = reader.read();//消耗乘号
                 ASTNode *child2 = NULL;
-                token = reader.peek(); //预读
-                if(token.type =="Digit") //读出数字
+                if(reader.peek().type =="Digit") //读出数字
                 {
                     token = reader.read(); //消耗
                     child2 = new ASTNode(token.text, ASTNodeType::IntLiteral);
                 } 
                 if(child2 != NULL) //如果成功读出右侧乘法因子
                 {
-                    node = new ASTNode(tmpToken.text, ASTNodeType::Multiplicative);
+                    node = new ASTNode("*", ASTNodeType::Multiplicative);
                     node->addChild(child1);
                     node->addChild(child2);
                     child1 = node;
@@ -69,4 +68,34 @@ ASTNode* SimpleLexer::multiplicative(TokenReader& reader)
         return node;
     }
     return NULL;
+}
+/**
+ * 解析整型变量声明语句
+ * intDeclaration -> int Identifier ( = additive )? ;
+*/
+ASTNode* SimpleLexer::intDeclaration(TokenReader& reader)
+{
+    ASTNode *node = NULL;
+    Token token = reader.peek(); //预读
+    if(token.type == "int"){
+       token = reader.read(); //消耗int
+       if(reader.peek().type == "ID"){
+            token = reader.read(); //消耗标识符
+            node = new ASTNode(token.text, ASTNodeType::IntDeclaration);
+            token = reader.peek(); //预读
+            if(token.type == "EQ"){
+                reader.read(); //消耗等号
+                ASTNode* child = additive(reader); //解析表达式
+                if(child == NULL){
+                    throw "invalide variable initialization, expecting an expression";
+                }
+                else{
+                    node->addChild(child);
+                }
+            }
+       } else{
+            throw "variable name expected";
+       }
+    }
+    return node;
 }

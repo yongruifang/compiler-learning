@@ -2,14 +2,15 @@
 #include "../day1/TokenReader.h"
 int main()
 {
-    string str[2] = {
+    string str[3] = {
         "2+3*5",
-        "2+3+4+5*6+7*8"
+        "2+3+4+5*6+7*8",
+        "int a = 2+3*5"
     };
-    TokenReader reader(str[1]);
+    TokenReader reader(str[2]);
     //reader.dump();
     SimpleLexer lexer;
-    ASTNode *root = lexer.additive(reader);
+    ASTNode *root = lexer.intDeclaration(reader);
     root->dump(root,"");
     return 0;
 }
@@ -36,5 +37,14 @@ Additive +
         Multiplicative *
                 IntLiteral 7
                 IntLiteral 8
+*/
+/** str[2]
+(base) PS D:\Temp\compiler-front\day2> .\test                                      
+IntDeclaration a
+        Additive +
+                IntLiteral 2
+                Multiplicative *
+                        IntLiteral 3
+                        IntLiteral 5
 */
 

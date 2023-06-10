@@ -8,5 +8,6 @@ public:
 	ASTNode* multiplicative(TokenReader &reader);
 	ASTNode* additive(TokenReader& reader);
 	ASTNode* multiplyDeclaration(TokenReader& reader);
+	ASTNode* intDeclaration(TokenReader& reader);
 };
 #endif

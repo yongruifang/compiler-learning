@@ -8,3 +8,24 @@ Additive +
     IntLiteral 3
     IntLiteral 5
 
+## 解析变量声明语句
+int age = 45
+- 目标，输出AST
+Programm Calculator
+    IntDeclaration age
+        AssignmentExp =
+            IntLiteral 45
+
+- 递归下降
+intDeclaration ::= Int Identifier ('=' additiveExpression)?;
+```c
+
+//伪代码
+MatchIntDeclare(){
+  MatchToken(Int)；        //匹配Int关键字
+  MatchIdentifier();       //匹配标识符
+  MatchToken(equal);       //匹配等号
+  MatchExpression();       //匹配表达式
+}
+```
+
