@@ -56,3 +56,23 @@ D:\Temp\compiler-front\day3>java org.antlr.v4.gui.TestRig Test tokens -tokens te
 [@22,67:66='<EOF>',<EOF>,4:1]
 ```
 
+# 生成语法分析器
+```bash
+D:\Temp\compiler-front\day3>cd antlrtest
+
+D:\Temp\compiler-front\day3\antlrtest>antlr4 PlayScript.g4
+
+D:\Temp\compiler-front\day3\antlrtest>java org.antlr.v4.Tool PlayScript.g4
+
+D:\Temp\compiler-front\day3\antlrtest>cd ..
+
+D:\Temp\compiler-front\day3>javac antlrtest/*.java
+
+D:\Temp\compiler-front\day3>grun antlrtest.PlayScript expression -gui
+
+D:\Temp\compiler-front\day3>java org.antlr.v4.gui.TestRig antlrtest.PlayScript expression -gui
+age+10*2+10
+^Z
+
+D:\Temp\compiler-front\day3>
+```
