@@ -16,7 +16,8 @@ enum STATE
 	GT, // 大于
 	GE, // 大于等于
     EQ, // 等于
-    IntLiteral // 数字字面量
+    IntLiteral, // 数字字面量
+    Plus, Minus, Star, Slash
 };
 // 
 typedef struct {

@@ -69,6 +69,12 @@ void TokenReader::parse()
             case EQ:
                 newState = initToken(ch);
                 break;  
+            case Plus:
+            case Minus:
+            case Star:
+            case Slash:
+                newState = initToken(ch);
+                break;
             case IntLiteral:
                 if(isdigit(ch)){
                     token.text += ch;
@@ -105,6 +111,18 @@ STATE TokenReader::initToken(char ch)
         token.text = ch;
     }else if(ch == '='){
         token.state = EQ;
+        token.text = ch;
+    }else if(ch == '+'){
+        token.state = Plus;
+        token.text = ch;
+    }else if(ch == '-'){
+        token.state = Minus;
+        token.text = ch;
+    }else if(ch == '*'){
+        token.state = Star;
+        token.text = ch;
+    }else if(ch == '/'){
+        token.state = Slash;
         token.text = ch;
     }else{
         token.state = INIT; //忽视规则之外的字符
