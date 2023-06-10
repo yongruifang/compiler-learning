@@ -105,7 +105,10 @@ void TokenReader::parse()
                 break;
         }
     }
-    initToken(' ');
+    if(token.text.length()>0){ //最后一个token
+        token.type = tokenTypeMap[token.state];
+        tokens.push_back(token);
+    }
 }
 STATE TokenReader::initToken(char ch)
 {
