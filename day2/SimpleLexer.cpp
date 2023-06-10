@@ -16,9 +16,40 @@ ASTNode* SimpleLexer::program(TokenReader &reader)
             child = additive(reader);
         }
         if(child == NULL){
+            child = assignmentStatement(reader);
+        }
+        if(child == NULL){
             throw "unknown statement";
         }else{
             node->addChild(child);
+        }
+    }
+    return node;
+}
+/**
+ * 解析赋值语句
+ * assignmentStatement -> Identifier = additive ;
+*/
+ASTNode* SimpleLexer::assignmentStatement(TokenReader& reader)
+{
+    ASTNode* node = NULL;
+    Token token = reader.peek(); //预读
+    if(token.type == "ID"){
+        token = reader.read(); //消耗标识符
+        node = new ASTNode(token.text, ASTNodeType::AssignmentStmt);
+        token = reader.peek(); //预读
+        if(token.type == "EQ"){
+            reader.read(); //消耗等号
+            ASTNode* child = additive(reader); //解析表达式
+            if(child == NULL){
+                throw "invalide assignment statement, expecting an expression";
+            }
+            else{
+                node->addChild(child);
+            }
+        }else{
+            reader.unread(); //回溯
+            node = NULL;
         }
     }
     return node;

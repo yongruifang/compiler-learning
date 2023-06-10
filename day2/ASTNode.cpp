@@ -12,7 +12,8 @@ map<int,string>  ASTNode::nodeTypeMap = {
     {Multiplicative, "Multiplicative"},
     {Additive, "Additive"},
     {Identifier, "Identifier"},
-    {IntLiteral, "IntLiteral"}
+    {IntLiteral, "IntLiteral"},
+    {AssignmentStmt, "AssignmentStmt"}
 };
 
 
