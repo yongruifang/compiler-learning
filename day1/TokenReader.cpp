@@ -41,9 +41,11 @@ void TokenReader::parse()
                 if(ch == 'n'){
                     token.text += ch;
                     token.state = ID_in;
+                    newState = ID_in;
                 }else if(isdigit(ch) || isalpha(ch)){
                     token.text += ch;
                     token.state = ID;
+                    newState = ID;
                 }else{
                     newState = initToken(ch);
                 }
@@ -52,9 +54,11 @@ void TokenReader::parse()
                 if(ch == 't'){
                     token.text += ch;
                     token.state = ID_int;
+                    newState = ID_int;
                 }else if(isdigit(ch) || isalpha(ch)){
                     token.text += ch;
                     token.state = ID;
+                    newState = ID;
                 }else{
                     newState = initToken(ch);
                 }
