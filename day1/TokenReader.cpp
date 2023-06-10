@@ -3,22 +3,21 @@
 TokenReader::TokenReader(string str_)
 {
     str = str_;
-    initMap();
     parse();
 }
-void TokenReader::initMap()
-{
-    tokenTypeMap[ID] = "ID";
-    tokenTypeMap[ID_int] = "int";
-    tokenTypeMap[GT] = "GT";
-    tokenTypeMap[GE] = "GE";
-    tokenTypeMap[EQ] = "EQ";
-    tokenTypeMap[IntLiteral] = "IntLiteral";
-    tokenTypeMap[Plus] = "Plus";
-    tokenTypeMap[Minus] = "Minus";
-    tokenTypeMap[Star] = "Star";
-    tokenTypeMap[Slash] = "Slash";
-}
+map<STATE, string> TokenReader::tokenTypeMap = {
+    {ID, "ID"},
+    {ID_int, "int"},
+    {GT, "GT"},
+    {GE, "GE"},
+    {EQ, "EQ"},
+    {Digit, "Digit"},
+    {Plus, "Plus"},
+    {Minus, "Minus"},
+    {Star, "Star"},
+    {Slash, "Slash"}
+};
+
 //============编写状态迁移的逻辑========================
 void TokenReader::parse()
 {
@@ -89,7 +88,7 @@ void TokenReader::parse()
             case Slash:
                 newState = initToken(ch);
                 break;
-            case IntLiteral:
+            case Digit:
                 if(isdigit(ch)){
                     token.text += ch;
                 }else{
@@ -119,7 +118,7 @@ STATE TokenReader::initToken(char ch)
         }
         token.text = ch;
     }else if(isdigit(ch)){
-        token.state = IntLiteral;
+        token.state = Digit;
         token.text = ch;
     }else if(ch == '>'){
         token.state = GT;
@@ -150,4 +149,37 @@ void TokenReader::dump(){
         cout << token.type << ": " << token.text <<  endl;
     }
     cout << endl;
+}
+/**
+ * 预读一个Token, 不移动指针
+*/
+Token TokenReader::peek()
+{
+	if (currentTokenIndex < tokens.size())
+		return tokens[currentTokenIndex]; 
+	return Token();
+}
+/**
+ * 读取一个Token, 移动指针
+*/
+Token TokenReader::read() // next unit
+{
+	if (currentTokenIndex < tokens.size())
+		return tokens[currentTokenIndex++];
+	return Token();
+}
+/**
+ * 撤销读取，回到上一个Token
+*/
+void TokenReader::unread()
+{
+	if (currentTokenIndex > 0)
+		currentTokenIndex--;
+}
+/**
+ * 获取当前Token的位置
+*/
+int TokenReader::GetCurrentToken()
+{
+	return currentTokenIndex;
 }
