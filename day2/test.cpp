@@ -1,5 +1,4 @@
 #include "SimpleLexer.h"
-#include "../day1/TokenReader.h"
 int main()
 {
     string str[3] = {
@@ -7,10 +6,8 @@ int main()
         "2+3+4+5*6+7*8",
         "int a = 2+3*5"
     };
-    TokenReader reader(str[2]);
-    //reader.dump();
     SimpleLexer lexer;
-    ASTNode *root = lexer.program(reader);
+    ASTNode *root = lexer.parse(str[2]);
     root->dump(root,"");
     return 0;
 }

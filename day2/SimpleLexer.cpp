@@ -1,4 +1,9 @@
 #include "SimpleLexer.h"
+ASTNode* SimpleLexer::parse(string script)
+{
+    TokenReader reader(script);
+    return program(reader);
+}
 /**
  * 统一入口
 */

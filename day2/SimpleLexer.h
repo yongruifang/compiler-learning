@@ -5,6 +5,7 @@
 class SimpleLexer
 {
 public:
+	ASTNode* parse(string script);
 	// 统一入口
 	ASTNode* program(TokenReader &reader);
 	ASTNode* multiplicative(TokenReader &reader);
