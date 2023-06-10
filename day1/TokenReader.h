@@ -19,7 +19,8 @@ enum STATE
     GE, // 大于等于
     EQ, // 等于
     Digit, // 数字字面量
-    Plus, Minus, Star, Slash
+    Plus, Minus, Star, Slash, // 四则运算符
+    SemiColon, // 分号
 };    
 
 

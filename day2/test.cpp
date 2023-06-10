@@ -5,7 +5,7 @@ int main()
         "2+3*5",
         "2+3+4+5*6+7*8",
         "int a = 2+3*5",
-        "a=2+3+5"
+        "a=2+3+5;"
     };
     SimpleLexer lexer;
     ASTNode *root = lexer.parse(str[3]);

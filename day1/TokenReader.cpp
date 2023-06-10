@@ -15,7 +15,8 @@ map<STATE, string> TokenReader::tokenTypeMap = {
     {Plus, "Plus"},
     {Minus, "Minus"},
     {Star, "Star"},
-    {Slash, "Slash"}
+    {Slash, "Slash"},
+    {SemiColon, "SemiColon"}
 };
 
 //============编写状态迁移的逻辑========================
@@ -90,6 +91,7 @@ void TokenReader::parse()
             case Minus:
             case Star:
             case Slash:
+            case SemiColon:
                 newState = initToken(ch);
                 break;
             case Digit:
@@ -141,6 +143,9 @@ STATE TokenReader::initToken(char ch)
         token.text = ch;
     }else if(ch == '/'){
         token.state = Slash;
+        token.text = ch;
+    }else if(ch == ';'){
+        token.state = SemiColon;
         token.text = ch;
     }else{
         token.state = INIT; //忽视规则之外的字符
