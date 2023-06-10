@@ -64,3 +64,40 @@ void ASTNode::dump(ASTNode* node, string indent)
         dump(child,indent+'\t');
     }
 }
+int ASTNode::evaluate(ASTNode* node, string indent)
+{
+    if(node == NULL) return 0;
+    int result = 0;
+    cout << indent << "Compute: " << nodeTypeMap[node->type] << endl;
+    ASTNode *child1=NULL, *child2 =NULL;
+    int value1 , value2;
+    switch(node->type){
+        case Program:
+            for(auto c : node->GetChildren())
+            {
+                result = evaluate(c, indent+"\t");
+            }
+            break;
+        case Additive :
+            child1 = node->GetChildren()[0];
+            value1 = evaluate(child1, indent+"\t");
+            child2 = node->GetChildren()[1];
+            value2 = evaluate(child2, indent+"\t");
+            result = value1 + value2;
+            break;
+        case Multiplicative:
+            child1 = node->GetChildren()[0];
+            value1 = evaluate(child1, indent+"\t");
+            child2 = node->GetChildren()[1];
+            value2 = evaluate(child2, indent+"\t");
+            result = value1 * value2;
+            break;           
+        case IntLiteral:
+            result = stoi(node->GetText());
+            break;
+        default:
+            break;
+    }
+    cout << indent << "Result: "<< result << endl;
+    return result;
+}

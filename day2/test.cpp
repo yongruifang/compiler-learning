@@ -7,8 +7,9 @@ int main()
         "int a = 2+3*5"
     };
     SimpleLexer lexer;
-    ASTNode *root = lexer.parse(str[2]);
+    ASTNode *root = lexer.parse(str[1]);
     root->dump(root,"");
+    root->evaluate(root,"");
     return 0;
 }
 /** str[0]
@@ -43,5 +44,35 @@ IntDeclaration a
                 Multiplicative *
                         IntLiteral 3
                         IntLiteral 5
+*/
+/** 计算
+Compute: Program
+        Compute: Additive
+                Compute: Additive
+                        Compute: Additive
+                                Compute: Additive
+                                        Compute: IntLiteral
+                                        Result: 2
+                                        Compute: IntLiteral
+                                        Result: 3
+                                Result: 5
+                                Compute: IntLiteral
+                                Result: 4
+                        Result: 9
+                        Compute: Multiplicative
+                                Compute: IntLiteral
+                                Result: 5
+                                Compute: IntLiteral
+                                Result: 6
+                        Result: 30
+                Result: 39
+                Compute: Multiplicative
+                        Compute: IntLiteral
+                        Result: 7
+                        Compute: IntLiteral
+                        Result: 8
+                Result: 56
+        Result: 95
+Result: 95
 */
 

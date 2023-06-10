@@ -34,5 +34,7 @@ public:
 	void addChild(string text, ASTNodeType type);
 	void addChild(ASTNode *node);
 	void dump(ASTNode* node, string indent);
+	//遍历AST树，计算表达式的值，打印求值过程
+	int evaluate(ASTNode* node, string indent);
 };
 #endif
