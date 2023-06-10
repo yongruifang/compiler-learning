@@ -84,14 +84,16 @@ int ASTNode::evaluate(ASTNode* node, string indent)
             value1 = evaluate(child1, indent+"\t");
             child2 = node->GetChildren()[1];
             value2 = evaluate(child2, indent+"\t");
-            result = value1 + value2;
+            if(node->text=="Plus") result = value1 + value2;
+            else if(node->text=="Minus") result = value1 - value2;
             break;
         case Multiplicative:
             child1 = node->GetChildren()[0];
             value1 = evaluate(child1, indent+"\t");
             child2 = node->GetChildren()[1];
             value2 = evaluate(child2, indent+"\t");
-            result = value1 * value2;
+            if(node->text=="Star") result = value1 * value2;
+            else if(node->text=="Slash") result = value1 / value2;
             break;           
         case IntLiteral:
             result = stoi(node->GetText());

@@ -1,16 +1,17 @@
 #include "SimpleLexer.h"
 int main()
 {
-    string str[4] = {
+    string str[5] = {
         "2+3*5",
         "2+3+4+5*6+7*8",
         "int a = 2+3*5",
-        "a=2+3+5;"
+        "a=2+3+5;",
+        "100+2-3*50/2"
     };
     SimpleLexer lexer;
-    ASTNode *root = lexer.parse(str[3]);
+    ASTNode *root = lexer.parse(str[4]);
     root->dump(root,"");
-    //root->evaluate(root,"");
+    root->evaluate(root,"");
     return 0;
 }
 /** str[0] : 2+3*5
@@ -86,4 +87,37 @@ Program root
                                 IntLiteral 2
                                 IntLiteral 3
                         IntLiteral 5
+*/
+/**
+ * str[4]: 100+2-3*50/2
+Program root
+        Additive Minus
+                Additive Plus
+                        IntLiteral 100
+                        IntLiteral 2
+                Multiplicative Slash
+                        Multiplicative Star
+                                IntLiteral 3
+                                IntLiteral 50
+                        IntLiteral 2
+Compute: Program
+        Compute: Additive
+                Compute: Additive
+                        Compute: IntLiteral
+                        Result: 100
+                        Compute: IntLiteral
+                        Result: 2
+                Result: 102
+                Compute: Multiplicative
+                        Compute: Multiplicative
+                                Compute: IntLiteral
+                                Result: 3
+                                Compute: IntLiteral
+                                Result: 50
+                        Result: 150
+                        Compute: IntLiteral
+                        Result: 2
+                Result: 75
+        Result: 27
+Result: 27
 */
