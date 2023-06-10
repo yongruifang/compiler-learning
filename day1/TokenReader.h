@@ -3,8 +3,10 @@
 */
 #ifndef TOKENREADER_H
 #define TOKENREADER_H
+#include <iostream>
 #include <string>
 #include <vector>
+#include "ctype.h"
 using namespace std;
 // 通过枚举量 定义 状态
 enum STATE
