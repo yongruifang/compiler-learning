@@ -19,7 +19,7 @@ ASTNode* SimpleLexer::program(TokenReader &reader)
             child = assignmentStatement(reader);
         }
         if(child == NULL){
-            throw "unknown statement";
+            throw std::runtime_error("unknown statement");
         }else{
             node->addChild(child);
         }
@@ -42,10 +42,15 @@ ASTNode* SimpleLexer::assignmentStatement(TokenReader& reader)
             reader.read(); //消耗等号
             ASTNode* child = additive(reader); //解析表达式
             if(child == NULL){
-                throw "invalide assignment statement, expecting an expression";
+                throw std::runtime_error("invalide assignment statement, expecting an expression");
             }
             else{
                 node->addChild(child);
+                if(reader.peek().type == "SemiColon"){
+                    reader.read(); //消耗分号
+                }else{ // 报错，缺少分号
+                    throw std::runtime_error("invalid statement, expecting semicolon");
+                }
             }
         }else{
             reader.unread(); //回溯
@@ -83,6 +88,10 @@ ASTNode* SimpleLexer::additive(TokenReader& reader)
             break;
         }
     }
+    if(reader.peek().text != "" && reader.peek().type != "SemiColon"){
+        reader.unread();
+        return NULL;
+    }
     return node;
 }
 /**
@@ -91,39 +100,45 @@ ASTNode* SimpleLexer::additive(TokenReader& reader)
 */
 ASTNode* SimpleLexer::multiplicative(TokenReader& reader)
 {
-    Token token = reader.peek();// 预读
-    if(token.type == "Digit") // 读出数字
+    ASTNode* child1 = primary(reader); //应用primary规则
+    ASTNode* node = child1;
+    while(true)
     {
-        token = reader.read();// 消耗
-        ASTNode* child1 = new ASTNode(token.text, ASTNodeType::IntLiteral);// 创建数字节点
-        ASTNode* node = child1; 
-        while(true)
+        Token token = reader.peek(); //预读
+        if(token.type == "Star" || token.type == "Slash") //读出乘除号
         {
-            Token token = reader.peek(); //预读
-            if(token.type == "Star" || token.type == "Slash") //读出乘除号
+            Token token = reader.read();//消耗
+            ASTNode *child2 = NULL;
+            child2 = primary(reader); //解析右侧乘法因子
+            if(child2 != NULL) //如果成功读出右侧乘法因子
             {
-                Token token = reader.read();//消耗乘号
-                ASTNode *child2 = NULL;
-                if(reader.peek().type =="Digit") //读出数字
-                {
-                    Token newToken = reader.read(); //消耗
-                    child2 = new ASTNode(newToken.text, ASTNodeType::IntLiteral);
-                } 
-                if(child2 != NULL) //如果成功读出右侧乘法因子
-                {
-                    node = new ASTNode(token.type, ASTNodeType::Multiplicative);
-                    node->addChild(child1);
-                    node->addChild(child2);
-                    child1 = node;
-                }else{
-                    throw "invalid multiplicative expression, expecting the right part.";
-                }
+                node = new ASTNode(token.type, ASTNodeType::Multiplicative);
+                node->addChild(child1);
+                node->addChild(child2);
+                child1 = node;
+            }else{
+                throw std::runtime_error("invalid multiplicative expression, expecting the right part.");
             }
-            else break;
         }
-        return node;
+        else break;
     }
-    return NULL;
+    return node;
+}
+/**
+ * 解析基础表达式
+*/
+ASTNode* SimpleLexer::primary(TokenReader& reader)
+{
+    Token token = reader.peek(); //预读
+    ASTNode* node = NULL;
+    if(token.type == "Digit"){
+        token = reader.read(); //消耗
+        node = new ASTNode(token.text, ASTNodeType::IntLiteral);
+    }else if(token.type == "ID"){
+        token = reader.read(); //消耗
+        node = new ASTNode(token.text, ASTNodeType::Identifier);
+    }
+    return node;
 }
 /**
  * 解析整型变量声明语句
@@ -143,14 +158,21 @@ ASTNode* SimpleLexer::intDeclaration(TokenReader& reader)
                 reader.read(); //消耗等号
                 ASTNode* child = additive(reader); //解析表达式
                 if(child == NULL){
-                    throw "invalide variable initialization, expecting an expression";
+                    throw std::runtime_error("invalide variable initialization, expecting an expression");
                 }
                 else{
                     node->addChild(child);
                 }
             }
        } else{
-            throw "variable name expected";
+            throw std::runtime_error("variable name expected");
+       }
+       if(node != NULL){
+            if(reader.peek().type == "SemiColon"){
+            reader.read(); //消耗分号
+            }else{ // 报错，缺少分号
+            throw std::runtime_error("invalid statement, expecting semicolon");
+            }
        }
     }
     return node;

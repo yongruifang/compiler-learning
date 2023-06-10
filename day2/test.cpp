@@ -1,4 +1,5 @@
 #include "SimpleLexer.h"
+#include "SimpleScript.h"
 int main()
 {
     string str[5] = {
@@ -8,10 +9,12 @@ int main()
         "a=2+3+5;",
         "100+2-3*50/2"
     };
-    SimpleLexer lexer;
-    ASTNode *root = lexer.parse(str[4]);
-    root->dump(root,"");
-    root->evaluate(root,"");
+//     SimpleLexer lexer;
+//     ASTNode *root = lexer.parse(str[4]);
+//     root->dump(root,"");
+//     root->evaluate(root,"");
+        SimpleScript script;
+        script.start(true);
     return 0;
 }
 /** str[0] : 2+3*5
@@ -120,4 +123,48 @@ Compute: Program
                 Result: 75
         Result: 27
 Result: 27
+*/
+
+/**
+ *  脚本
+(base) PS D:\Temp\compiler-front\day2> test
+Simple Script Language!
+Type 'exit();' to quit
+verbse mode
+>2+3
+2+3
+Compute: Program
+        Compute: Additive
+                Compute: IntLiteral
+                Result: 2
+                Compute: IntLiteral
+                Result: 3
+        Result: 5
+Result: 5
+
+>int a = 2+3;
+int a = 2+3;
+Compute: Program
+        Compute: IntDeclaration
+                Compute: Additive
+                        Compute: IntLiteral
+                        Result: 2
+                        Compute: IntLiteral
+                        Result: 3
+                Result: 5
+        Result: 5
+Result: 5
+
+>a = a + 3;
+a = a + 3;
+Compute: Program
+        Compute: AssignmentStmt
+                Compute: Additive
+                        Compute: Identifier
+                        Result: 5
+                        Compute: IntLiteral
+                        Result: 3
+                Result: 8
+        Result: 8
+Result: 8
 */

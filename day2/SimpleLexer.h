@@ -11,6 +11,7 @@ public:
 	ASTNode* multiplicative(TokenReader &reader);
 	ASTNode* additive(TokenReader& reader);
 	ASTNode* multiplyDeclaration(TokenReader& reader);
+	ASTNode* primary(TokenReader& reader);
 	ASTNode* intDeclaration(TokenReader& reader);
 	ASTNode* assignmentStatement(TokenReader& reader);
 };
