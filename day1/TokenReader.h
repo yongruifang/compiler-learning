@@ -12,9 +12,10 @@ using namespace std;
 enum STATE
 {
 	INIT = 0, // 初始状态
-	ID, // 标识符状态
+	ID, ID_i, ID_in, ID_int,// 标识符状态
 	GT, // 大于
 	GE, // 大于等于
+    EQ, // 等于
     IntLiteral // 数字字面量
 };
 // 

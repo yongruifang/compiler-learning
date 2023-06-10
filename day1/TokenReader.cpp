@@ -24,6 +24,36 @@ void TokenReader::parse()
                     newState = initToken(ch);
                 }
                 break;
+            case ID_i:
+                if(ch == 'n'){
+                    token.text += ch;
+                    token.state = ID_in;
+                }else if(isdigit(ch) || isalpha(ch)){
+                    token.text += ch;
+                    token.state = ID;
+                }else{
+                    newState = initToken(ch);
+                }
+                break;
+            case ID_in:
+                if(ch == 't'){
+                    token.text += ch;
+                    token.state = ID_int;
+                }else if(isdigit(ch) || isalpha(ch)){
+                    token.text += ch;
+                    token.state = ID;
+                }else{
+                    newState = initToken(ch);
+                }
+                break;
+            case ID_int:
+                if(isblank(ch)){
+                    newState = initToken(ch);
+                }else{
+                    token.state = ID;
+                    token.text += ch;
+                }
+                break;
             case GT:
                 if(ch == '='){
                     token.state = GE;
@@ -36,6 +66,9 @@ void TokenReader::parse()
             case GE:
                 newState = initToken(ch);
                 break;
+            case EQ:
+                newState = initToken(ch);
+                break;  
             case IntLiteral:
                 if(isdigit(ch)){
                     token.text += ch;
@@ -58,13 +91,20 @@ STATE TokenReader::initToken(char ch)
     token.state = INIT;
     //INIT状态的迁移逻辑
     if(isalpha(ch)){
-        token.state = ID;
+        if(ch == 'i'){
+            token.state = ID_i; //对字符i特殊处理
+        }else{
+            token.state = ID;
+        }
         token.text = ch;
     }else if(isdigit(ch)){
         token.state = IntLiteral;
         token.text = ch;
     }else if(ch == '>'){
         token.state = GT;
+        token.text = ch;
+    }else if(ch == '='){
+        token.state = EQ;
         token.text = ch;
     }else{
         token.state = INIT; //忽视规则之外的字符
