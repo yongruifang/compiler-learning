@@ -1,3 +1,4 @@
+package ep1;
 // Generated from ArrayInit.g4 by ANTLR 4.13.0
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
