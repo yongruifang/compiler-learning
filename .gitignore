@@ -1,6 +1,5 @@
 .vscode/**
 **/*.exe
 **/*.interp
-**/*.java
 **/*.tokens
 **/*.class
